@@ -1,0 +1,15 @@
+{
+  "name": "master-ia-startup",
+  "version": "1.0.0",
+  "description": "Clases para aprender a utilizar la Inteligencia Artificial en el desarrollo de software moderno y en la creación de aplicaciones innovadoras.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
