@@ -16,27 +16,38 @@ export class StockService {
     motivo: string;
     usuarioId: string;
   }): Promise<MovimientoStock> {
-    if (!datos.productoId || datos.productoId.trim() === "") {
-      throw new Error("El productoId es requerido");
-    }
-    if (!datos.usuarioId || datos.usuarioId.trim() === "") {
-      throw new Error("El usuarioId es requerido");
-    }
-    if (datos.cantidad <= 0) {
-      throw new Error("La cantidad debe ser mayor a cero");
-    }
+    try {
+      if (!datos.productoId || datos.productoId.trim() === "") {
+        throw new Error("El productoId es requerido");
+      }
+      if (!datos.usuarioId || datos.usuarioId.trim() === "") {
+        throw new Error("El usuarioId es requerido");
+      }
+      if (datos.cantidad <= 0) {
+        throw new Error("La cantidad debe ser mayor a cero");
+      }
 
-    const stockActual = await this.movimientoRepo.calcularStock(
-      datos.varianteId,
-    );
+      // Log SKU y cantidad de la entrada
+      console.log(
+        `Registro entrada de mercadería - SKU: ${datos.sku}, Cantidad: ${datos.cantidad}`,
+      );
 
-    return this.movimientoRepo.crear({
-      ...datos,
-      tipo: "entrada",
-      stockAnterior: stockActual,
-      stockNuevo: stockActual + datos.cantidad,
-      fecha: new Date(),
-    });
+      const stockActual = await this.movimientoRepo.calcularStock(
+        datos.varianteId,
+      );
+
+      return await this.movimientoRepo.crear({
+        ...datos,
+        tipo: "entrada",
+        stockAnterior: stockActual,
+        stockNuevo: stockActual + datos.cantidad,
+        fecha: new Date(),
+      });
+    } catch (error: any) {
+      throw new Error(
+        error?.message || "Error al registrar entrada de mercadería",
+      );
+    }
   }
 
   async descontarPorVenta(datos: {
